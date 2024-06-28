@@ -1,0 +1,8 @@
+llvmlite==0.43.0
+numba==0.60.0
+numpy==2.0.0
+PyQt5==5.15.10
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.13.0
+pyqtgraph==0.13.7
+watchdog==4.0.1
