@@ -27,13 +27,18 @@ class CentralMenu(QWidget):
         # (4): Set the current file index to 0 to indicate that we haven't chosen a file yet but just want something to display:
         self.current_file_index = 0
 
-        # (5): Set the "reconstruction flag" to be True:
+        # (5): Set the current event index --- Remember, the syntax is usually: file[run, spill, event]
+        self.current_event_index = 0
+
+        self.number_of_events_in_given_spill = 0
+
+        # (6): Set the "reconstruction flag" to be True:
         self._ONLNE_RECONSTRUCTION_SETTING = True
 
-        # (6): Initialize the UI:
+        # (7): Initialize the UI:
         self.initialize_ui()
 
-        # (7): Once the UI has been initialized, we propagate the first piece of data:
+        # (8): Once the UI has been initialized, we propagate the first piece of data:
         self.load_file_contents(self._ONLNE_RECONSTRUCTION_SETTING)
 
     def initialize_ui(self):
@@ -92,15 +97,15 @@ class CentralMenu(QWidget):
 
         button_current_event = QPushButton("[ Current Event ]")
         button_current_event.setCheckable(False)
-        button_current_event.clicked.connect(self.button_current_clicked)
+        button_current_event.clicked.connect(self.button_current_event_clicked)
 
         button_previous_event = QPushButton("[ Previous Event ]")
         button_previous_event.setCheckable(False)
-        button_previous_event.clicked.connect(self.button_previous_clicked)
+        button_previous_event.clicked.connect(self.button_previous_event_clicked)
         
         button_next_run_event = QPushButton("[ Next Event ]")
         button_next_run_event.setCheckable(False)
-        button_next_run_event.clicked.connect(self.button_next_clicked)
+        button_next_run_event.clicked.connect(self.button_next_event_clicked)
 
         self.button_menu_grid_layout.addWidget(button_current_run, 0, 0)
         self.button_menu_grid_layout.addWidget(button_previous_run, 0, 1)
@@ -243,6 +248,57 @@ class CentralMenu(QWidget):
             else:
                 print("> Ignored.")
 
+    def button_previous_event_clicked(self):
+        print(f"> Previous event requested: {self.current_event_index}")
+        
+        # (1.1): If online reconstruction is on:
+        if self._ONLNE_RECONSTRUCTION_SETTING:
+
+            did_user_turn_off_orom = self.confirm_button_press()
+
+            if did_user_turn_off_orom:
+                print("> Previous event button clicked!")
+                self._ONLNE_RECONSTRUCTION_SETTING = False
+                self.current_event_index = self.current_event_index - 1
+            else:
+                print("> Ignored.")
+
+        # (1.2): If online reconstruction is off:
+        else:
+
+            # (1.2.1): If the current file index is already at the "most recent file", then ignore:
+            if self.current_file_index == len(self.sorted_files) - 1:
+                pass
+            else:
+                print('ff')
+                self.current_file_index = self.current_file_index + 1
+                self.load_file_contents(self._ONLNE_RECONSTRUCTION_SETTING)
+    
+    def button_next_event_clicked(self):
+        print(f"> Next event requested: {self.current_event_index}")
+        self.current_event_index = self.current_event_index + 1
+        self.load_file_contents(False)
+
+    def button_current_event_clicked(self):
+        print(f"> Request ")
+        
+        # (1.1): If online reconstruction is on:
+        if self._ONLNE_RECONSTRUCTION_SETTING:
+
+            pass
+
+        # (1.2): If online reconstruction is off:
+        else:
+
+            did_user_turn_on_orom = self.confirm_button_press()
+
+            if did_user_turn_on_orom:
+                print("> Current event button clicked!")
+                self._ONLNE_RECONSTRUCTION_SETTING = True
+                self.current_event_index = self.current_event_index + 1
+            else:
+                print("> Current event button click ignored.")
+
     def load_file_contents(self, turned_on_orom_boolean):
         """
         # Description: 
@@ -250,9 +306,8 @@ class CentralMenu(QWidget):
         and propagate it to all of the tabs that utilize it. 
         """
 
+        # If we are in LIVE ORM mode, then we look at the most recent file:
         self.current_file_index = 0 if turned_on_orom_boolean else self.current_file_index
-
-        self.current_event_number_index = 0
 
         # (1): Obtain the name of the file:
         name_of_current_file = self.sorted_files[self.current_file_index]
@@ -260,12 +315,16 @@ class CentralMenu(QWidget):
         # (2): We find the filepath of the file that we are reading:
         file_path = os.path.join(self.current_directory, name_of_current_file)
 
-        # (3): Use NumPy's `.npy` file-reader function to read the file:
+        # (3): Use NumPy's `.npy` file-reader function to read the file --- it is a NpzFile with keys: output_data, hit_matrix, Tracks
         file_data = np.load(file_path)
 
+        self.number_of_events_in_given_spill = len(file_data['output_data'])
+
         # # (4): The `.npz` file contains three pieces of relevant data:
-        print(f"> Run {file_data['output_data'][0, 34]}, Spill {file_data['output_data'][0, 36]}, Event {file_data['output_data'][0, 35]}")
-        print(file_data['output_data'][0, 38])
+        print(f"> Run {file_data['output_data'][self.current_event_index, 34]}, Spill {file_data['output_data'][self.current_event_index, 36]}, Event {file_data['output_data'][self.current_event_index, 35]}")
+        # print(file_data['output_data'][self.current_event_index, 38])
+
+        print(len(file_data['output_data']))
 
         # # (4.1): [1] | Physics Data:
         output_data = file_data['output_data']
@@ -280,9 +339,9 @@ class CentralMenu(QWidget):
         filename_data = f"> Current File: {self.sorted_files[self.current_file_index]}"
         
         # (6): This follows from (3): we put the filename into the textbox with .setText()
-        current_run_number = output_data[0, 34]
-        current_spill_number = output_data[0, 36]
-        current_event_number = output_data[0, 35]
+        current_run_number = output_data[self.current_event_index, 34]
+        current_spill_number = output_data[self.current_event_index, 36]
+        current_event_number = output_data[self.current_event_index, 35]
         
         self.textbox.setText(filename_data)
         self.textbox_run_number.setText(f"> Run: {current_run_number}")
