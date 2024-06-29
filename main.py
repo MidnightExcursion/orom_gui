@@ -88,7 +88,9 @@ class MainWindow(QMainWindow):
         reconstructed_data_filename = data_packet['filename']
         reconstructed_data_filepath = data_packet['filepath']
         reconstructed_data_output_data = data_packet['file_output_data']
-        reconstructed_data_hit_matrix= data_packet['file_hit_matrix']
+        reconstructed_data_hit_matrix = data_packet['file_hit_matrix']
+        reconstructed_data_hit_matrix_for_event = data_packet['file_hit_matrix_for_event']
+        event_number = data_packet['event_number']
         reconstructed_data_track_data = data_packet['file_track_data']
 
         # (1): Reconstructed Logs:
@@ -101,7 +103,10 @@ class MainWindow(QMainWindow):
         self.mass_histogram.update_histogram_data(reconstructed_data_output_data)
 
         # (4): Hit Display:
-        self.hit_matrix.update_hit_data(reconstructed_data_hit_matrix, reconstructed_data_track_data)
+        self.hit_matrix.update_hit_data(
+            reconstructed_data_hit_matrix,
+            reconstructed_data_hit_matrix_for_event,
+            event_number)
 
         # (6): 
 

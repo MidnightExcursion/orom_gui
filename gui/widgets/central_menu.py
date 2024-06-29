@@ -22,7 +22,7 @@ class CentralMenu(QWidget):
         self.current_directory = _PATH_FOR_RECONSTRUCTED_DATA
 
         # (3): Sort ALL the files in the given directory (if it's an .npz file):
-        self.sorted_files = sorted([file for file in os.listdir(self.current_directory) if (file.endswith('.npz') or file.endswith('.npy'))])
+        self.sorted_npz_files = sorted([file for file in os.listdir(self.current_directory) if (file.endswith('.npz') or file.endswith('.npy'))])
 
         # (4): Set the current file index to 0 to indicate that we haven't chosen a file yet but just want something to display:
         self.current_file_index = 0
@@ -30,15 +30,16 @@ class CentralMenu(QWidget):
         # (5): Set the current event index --- Remember, the syntax is usually: file[run, spill, event]
         self.current_event_index = 0
 
+        # (6): Initialize the number of events in a given spill file:
         self.number_of_events_in_given_spill = 0
 
-        # (6): Set the "reconstruction flag" to be True:
+        # (7): Set the "reconstruction flag" to be True:
         self._ONLNE_RECONSTRUCTION_SETTING = True
 
-        # (7): Initialize the UI:
+        # (8): Initialize the UI:
         self.initialize_ui()
 
-        # (8): Once the UI has been initialized, we propagate the first piece of data:
+        # (9): Once the UI has been initialized, we propagate the first piece of data:
         self.load_file_contents(self._ONLNE_RECONSTRUCTION_SETTING)
 
     def initialize_ui(self):
@@ -71,17 +72,7 @@ class CentralMenu(QWidget):
         self.textbox_event_number = QLineEdit(self)
         self.textbox_event_number.setReadOnly(True)
 
-        button_current_run = QPushButton("[ Current Run ]")
-        button_current_run.setCheckable(False)
-        button_current_run.clicked.connect(self.button_current_clicked)
-
-        button_previous_run = QPushButton("[ Previous Run ]")
-        button_previous_run.setCheckable(False)
-        button_previous_run.clicked.connect(self.button_previous_clicked)
-        
-        button_next_run = QPushButton("[ Next Run ]")
-        button_next_run.setCheckable(False)
-        button_next_run.clicked.connect(self.button_next_clicked)
+        # (): Spill Buttons:
 
         button_current_spill = QPushButton("[ Current Spill ]")
         button_current_spill.setCheckable(False)
@@ -107,17 +98,13 @@ class CentralMenu(QWidget):
         button_next_run_event.setCheckable(False)
         button_next_run_event.clicked.connect(self.button_next_event_clicked)
 
-        self.button_menu_grid_layout.addWidget(button_current_run, 0, 0)
-        self.button_menu_grid_layout.addWidget(button_previous_run, 0, 1)
-        self.button_menu_grid_layout.addWidget(button_next_run, 0, 2)
+        self.button_menu_grid_layout.addWidget(button_current_spill, 0, 0)
+        self.button_menu_grid_layout.addWidget(button_previous_spill, 0, 1)
+        self.button_menu_grid_layout.addWidget(button_next_spill, 0, 2)
 
-        self.button_menu_grid_layout.addWidget(button_current_spill)
-        self.button_menu_grid_layout.addWidget(button_previous_spill)
-        self.button_menu_grid_layout.addWidget(button_next_spill)
-
-        self.button_menu_grid_layout.addWidget(button_current_event)
-        self.button_menu_grid_layout.addWidget(button_previous_event)
-        self.button_menu_grid_layout.addWidget(button_next_run_event)
+        self.button_menu_grid_layout.addWidget(button_current_event, 1, 0)
+        self.button_menu_grid_layout.addWidget(button_previous_event, 1, 1)
+        self.button_menu_grid_layout.addWidget(button_next_run_event, 1, 2)
 
         self.button_menu_grid.setLayout(self.button_menu_grid_layout)
 
@@ -126,7 +113,6 @@ class CentralMenu(QWidget):
 
         vertical_box_layout.addLayout(horizonal_box_layout_for_light_and_buttons)
         vertical_box_layout.addWidget(self.textbox)
-        vertical_box_layout.addWidget(self.textbox_run_number)
         vertical_box_layout.addWidget(self.textbox_spill_number)
         vertical_box_layout.addWidget(self.textbox_event_number)
 
@@ -220,7 +206,7 @@ class CentralMenu(QWidget):
             print('a')
 
             # (1.2.1): If the current file index is already at the "most recent file", then ignore:
-            if self.current_file_index == len(self.sorted_files) - 1:
+            if self.current_file_index == len(self.sorted_npz_files) - 1:
                 print('z')
                 pass
             else:
@@ -249,35 +235,26 @@ class CentralMenu(QWidget):
                 print("> Ignored.")
 
     def button_previous_event_clicked(self):
-        print(f"> Previous event requested: {self.current_event_index}")
-        
-        # (1.1): If online reconstruction is on:
-        if self._ONLNE_RECONSTRUCTION_SETTING:
-
-            did_user_turn_off_orom = self.confirm_button_press()
-
-            if did_user_turn_off_orom:
-                print("> Previous event button clicked!")
-                self._ONLNE_RECONSTRUCTION_SETTING = False
-                self.current_event_index = self.current_event_index - 1
-            else:
-                print("> Ignored.")
-
-        # (1.2): If online reconstruction is off:
+        """
+        # Description:
+        As long as we are not at the "last event" (index == 0) of the 
+        given listen 
+         
+        """
+        print(f"> Next event requested: {self.current_event_index}")
+        if self.current_event_index == 0:
+            pass
         else:
-
-            # (1.2.1): If the current file index is already at the "most recent file", then ignore:
-            if self.current_file_index == len(self.sorted_files) - 1:
-                pass
-            else:
-                print('ff')
-                self.current_file_index = self.current_file_index + 1
-                self.load_file_contents(self._ONLNE_RECONSTRUCTION_SETTING)
+            self.current_event_index = self.current_event_index - 1
+            self.load_file_contents(False)
     
     def button_next_event_clicked(self):
         print(f"> Next event requested: {self.current_event_index}")
-        self.current_event_index = self.current_event_index + 1
-        self.load_file_contents(False)
+        if (self.current_event_index + 1 == self.number_of_events_in_given_spill):
+            pass
+        else:
+            self.current_event_index = self.current_event_index + 1
+            self.load_file_contents(False)
 
     def button_current_event_clicked(self):
         print(f"> Request ")
@@ -306,11 +283,11 @@ class CentralMenu(QWidget):
         and propagate it to all of the tabs that utilize it. 
         """
 
-        # If we are in LIVE ORM mode, then we look at the most recent file:
+        # (1): If we are in LIVE ORM mode, then we look at the most recent file:
         self.current_file_index = 0 if turned_on_orom_boolean else self.current_file_index
 
-        # (1): Obtain the name of the file:
-        name_of_current_file = self.sorted_files[self.current_file_index]
+        # (2): Obtain the name of the file:
+        name_of_current_file = self.sorted_npz_files[self.current_file_index]
         
         # (2): We find the filepath of the file that we are reading:
         file_path = os.path.join(self.current_directory, name_of_current_file)
@@ -336,7 +313,7 @@ class CentralMenu(QWidget):
         track_data = file_data['Tracks']
 
         # (5): We obtain the name of the file so we can propagate it to the CentralMenu textbox:
-        filename_data = f"> Current File: {self.sorted_files[self.current_file_index]}"
+        filename_data = f"> Current File: {self.sorted_npz_files[self.current_file_index]}"
         
         # (6): This follows from (3): we put the filename into the textbox with .setText()
         current_run_number = output_data[self.current_event_index, 34]
@@ -355,6 +332,8 @@ class CentralMenu(QWidget):
             'filepath': file_path,
             'file_output_data': output_data,
             'file_hit_matrix': hit_matrix,
+            'file_hit_matrix_for_event': hit_matrix[self.current_event_index],
+            'event_number': self.current_event_index + 1,
             'file_track_data': track_data
             })
 
