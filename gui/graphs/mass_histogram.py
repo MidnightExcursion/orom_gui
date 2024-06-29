@@ -80,7 +80,7 @@ class MassHistogram(QWidget):
         events_negative_muon_momentum_y = data_with_possible_dimuons[:, 30]
         events_negative_muon_momentum_z = data_with_possible_dimuons[:, 31]
 
-        # This will be a rank-2 matrix with: events vs. mass
+        # This will be a rank-2 matrix with: [events, momentum] -> [events, mass]
         mass_array = calculate_invariant_mass(data_with_possible_dimuons[:, 26:32])
 
         # Create a histogram item

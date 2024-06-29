@@ -8,6 +8,10 @@ from gui.statics.statics import _MASS_OF_MUON_IN_GEV, _MASS_OF_PROTON_IN_GEV
 from gui.statics.statics import _PATH_FOR_RECONSTRUCTED_DATA
 from gui.statics.statics import _PROBABILITY_DIMUON_EVENT
 
+
+def calculate_dimuon_four_momentum_sum(slice_of_events_and_kinematics):
+    pass
+
 def calculate_invariant_mass(slice_of_events_and_kinematics):
     """
     # Description:
@@ -15,11 +19,24 @@ def calculate_invariant_mass(slice_of_events_and_kinematics):
     the lab frame.
     """
 
+    # (1): Obtain the columns containing momenta for the plus and minus muon:
+
+    # (1.1): Obtain the column corresponding to the positive muons's p_{x}:
     positive_muon_momentum_x = slice_of_events_and_kinematics[:, 0]
+
+    # (1.2): Obtain the column corresponding to the positive muons's p_{y}:
     positive_muon_momentum_y = slice_of_events_and_kinematics[:, 1]
+
+    # (1.3): Obtain the column corresponding to the positive muons's p_{z}:
     positive_muon_momentum_z = slice_of_events_and_kinematics[:, 2]
+
+    # (1.4): Obtain the column corresponding to the negative muons's p_{x}:
     negative_muon_momentum_x = slice_of_events_and_kinematics[:, 3]
+
+    # (1.5): Obtain the column corresponding to the negative muons's p_{y}:
     negative_muon_momentum_y = slice_of_events_and_kinematics[:, 4]
+
+    # (1.6): Obtain the column corresponding to the negative muons's p_{z}:
     negative_muon_momentum_z = slice_of_events_and_kinematics[:, 5]
 
     energy_of_proton_beam_in_GeV = 120.0
@@ -34,7 +51,11 @@ def calculate_invariant_mass(slice_of_events_and_kinematics):
     momentum_center_of_mass = momentum_of_beam + momentum_target
 
     # (): Calculate the first component of p_{mu}:
-    energy_of_positive_muon = np.sqrt(positive_muon_momentum_x * positive_muon_momentum_x + positive_muon_momentum_y * positive_muon_momentum_y + positive_muon_momentum_z * positive_muon_momentum_z + _MASS_OF_MUON_IN_GEV * _MASS_OF_MUON_IN_GEV)
+    energy_of_positive_muon = np.sqrt(
+        positive_muon_momentum_x * positive_muon_momentum_x + 
+        positive_muon_momentum_y * positive_muon_momentum_y + 
+        positive_muon_momentum_z * positive_muon_momentum_z + 
+        _MASS_OF_MUON_IN_GEV * _MASS_OF_MUON_IN_GEV)
     
     four_momentum_positive_muon = np.array([
         energy_of_positive_muon,
@@ -42,7 +63,11 @@ def calculate_invariant_mass(slice_of_events_and_kinematics):
         positive_muon_momentum_y,
         positive_muon_momentum_z])
 
-    energy_of_negative_muon = np.sqrt(negative_muon_momentum_x * negative_muon_momentum_x + negative_muon_momentum_y * negative_muon_momentum_y + negative_muon_momentum_z * negative_muon_momentum_z + _MASS_OF_MUON_IN_GEV * _MASS_OF_MUON_IN_GEV)
+    energy_of_negative_muon = np.sqrt(
+        negative_muon_momentum_x * negative_muon_momentum_x + 
+        negative_muon_momentum_y * negative_muon_momentum_y + 
+        negative_muon_momentum_z * negative_muon_momentum_z + 
+        _MASS_OF_MUON_IN_GEV * _MASS_OF_MUON_IN_GEV)
     
     four_momentum_negative_muon = np.array([
         energy_of_negative_muon,
@@ -59,6 +84,42 @@ def calculate_invariant_mass(slice_of_events_and_kinematics):
     invariant_dimuon_mass = np.sqrt(invariant_dimuon_mass_squared_no_negative_masses)
 
     return invariant_dimuon_mass
+
+def calculate_transverse_momentum(four_momentum_positive_muon, four_momentum_negative_muon):
+    """
+    # Description:
+    We simply calculate the transverse momentum of the mother particle.
+    """
+
+    total_transverse_momentum = np.sqrt(np.power(four_momentum_positive_muon[3], 2) + np.power(four_momentum_negative_muon[3], 2))
+
+    return total_transverse_momentum
+
+def calculate_x1():
+    pass
+
+def calculate_cosine_theta(four_momentum_positive_muon, four_momentum_negative_muon, dimuon_invariant_mass, transverse_momentum):
+    """
+    # Description:
+    Calculate the cosine of the lab angle.
+    """
+    cosine_theta = np.arctan2(
+         2.0 * (
+        four_momentum_negative_muon[3] * four_momentum_positive_muon[2] - four_momentum_positive_muon[3] * four_momentum_negative_muon[2]
+        ) / dimuon_invariant_mass / np.sqrt(dimuon_invariant_mass * dimuon_invariant_mass + transverse_momentum * transverse_momentum)
+    )
+    return cosine_theta
+
+def calculate_sine_theta(cosine_theta):
+    """
+    # Description:
+    Calculate the sine of the angle simply using the familiar trigonometric
+    identity:
+
+    $$sin^{2}(x) + cos^{2}(x) = 1$$.
+    """
+    sine_theta = np.sqrt(1. - np.power(cosine_theta, 2))
+    return sine_theta
 
 
 def obtain_verticies(file_path):
