@@ -182,32 +182,52 @@ class CentralMenu(QWidget):
             print(f"> Bug in code....")
 
     def button_previous_clicked(self):
-        print(f"> PREVIOUS initiated: Reco on? {self._ONLNE_RECONSTRUCTION_SETTING}. Current index: {self.current_file_index}")
+        """
+        # Description:
+        If the [Previous Spill] button is clicked, then we check to see
+        if we are actively building reconstructed files. If we are, we 
+        perform a warn to the user before proceeding. If not, we advance 
+        to the previous entry in `current_file_list` and reset the 
+        `current_event_index` to 0.
+        """
 
         # (1.1): If online reconstruction is on:
         if self._ONLNE_RECONSTRUCTION_SETTING:
 
+            # (1.1.1): Obtain user permission to stop live reconstruction display:
             did_user_turn_off_orom = self.confirm_button_press()
 
+            # (1.1.1.1): If the user agrees (presses [Yes]) to stop live display, we simply load
             if did_user_turn_off_orom:
-                print("> Previous button clicked!")
+
+                # (1.1.1.1.1): We flip OFF the live reconstruction display:
                 self._ONLNE_RECONSTRUCTION_SETTING = False
+
+                # (1.1.1.1.2): We initiate the propagation of data to GUI elements with live display as `False`:
                 self.load_file_contents(self._ONLNE_RECONSTRUCTION_SETTING)
+            
+            # (1.1.1.2): If the user declines (presses [No]) to stop live display, we do nothing:
             else:
-                print("> Ignored.")
+                pass
 
         # (1.2): If online reconstruction is off:
         else:
-            print('asdas')
-            if self.current_file_index == 0:
-                print('asfsd')
-                pass
-            else:
-                print('sd')
-                self.current_file_index = self.current_file_index - 1
-                self.load_file_contents(self._ONLNE_RECONSTRUCTION_SETTING)
 
-        print('zz')
+            # (1.2.1): If the current file is the "earliest" in the list, then do nothing:
+            if self.current_file_index == 0:
+                pass
+
+            # (1.2.2): If the current file is somewhere other the "earliest", traverse backwards in the list:
+            else:
+
+                # (1.2.2.1): Traversing backwards through the list of files:
+                self.current_file_index = self.current_file_index - 1
+
+                # (1.2.2.2): Resetting the event index number:
+                self.current_event_index = 0
+
+                # (1.2.2.3): Initiate data propagation to GUI elements with reconstructed setting as `False`:
+                self.load_file_contents(self._ONLNE_RECONSTRUCTION_SETTING)
 
     def button_next_clicked(self):
         print(f"> NEXT initiated: Reco on? {self._ONLNE_RECONSTRUCTION_SETTING}. Current index: {self.current_file_index}")
@@ -281,7 +301,9 @@ class CentralMenu(QWidget):
             self.load_file_contents(False)
 
     def button_current_event_clicked(self):
-        print(f"> Request ")
+        """
+        # Description:
+        """
         
         # (1.1): If online reconstruction is on:
         if self._ONLNE_RECONSTRUCTION_SETTING:
@@ -357,5 +379,6 @@ class CentralMenu(QWidget):
             'event_number': self.current_event_index + 1,
             'file_track_data': track_data
             })
+        
 
 

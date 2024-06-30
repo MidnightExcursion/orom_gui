@@ -46,27 +46,27 @@ class MomentumDistributions(QWidget):
 
         momentum_py_plot_item.showGrid(x = True,y = True)
         momentum_py_plot_item.setTitle(f'SpinQuest | py Distribution | Total Events:')
-        momentum_py_plot_item.setLabel('bottom',"p_{x}", units = 'GeV')
+        momentum_py_plot_item.setLabel('bottom',"p_{y}", units = 'GeV')
         momentum_py_plot_item.setLabel('left',"Counts", units = 'N')
 
         momentum_pz_plot_item.showGrid(x = True,y = True)
         momentum_pz_plot_item.setTitle(f'SpinQuest | pz Distribution | Total Events:')
-        momentum_pz_plot_item.setLabel('bottom',"$p_{z}", units = 'GeV')
+        momentum_pz_plot_item.setLabel('bottom',"p_{z}", units = 'GeV')
         momentum_pz_plot_item.setLabel('left',"Counts", units = 'N')
 
         per_event_momentum_px_plot.showGrid(x = True,y = True)
         per_event_momentum_px_plot.setTitle(f'SpinQuest | px Distribution | Event Number:')
-        per_event_momentum_px_plot.setLabel('bottom',"$p_{x}", units = 'GeV')
+        per_event_momentum_px_plot.setLabel('bottom',"p_{x}", units = 'GeV')
         per_event_momentum_px_plot.setLabel('left',"Counts", units = 'N')
         
         per_event_momentum_py_plot.showGrid(x = True,y = True)
         per_event_momentum_py_plot.setTitle(f'SpinQuest | py Distribution | Event Number:')
-        per_event_momentum_py_plot.setLabel('bottom',"$p_{y}", units = 'GeV')
+        per_event_momentum_py_plot.setLabel('bottom',"p_{y}", units = 'GeV')
         per_event_momentum_py_plot.setLabel('left',"Counts", units = 'N')
 
         per_event_momentum_pz_plot.showGrid(x = True,y = True)
         per_event_momentum_pz_plot.setTitle(f'SpinQuest | pz Distribution | Event Number:')
-        per_event_momentum_pz_plot.setLabel('bottom',"$p_{z}", units = 'GeV')
+        per_event_momentum_pz_plot.setLabel('bottom',"p_{z}", units = 'GeV')
         per_event_momentum_pz_plot.setLabel('left',"Counts", units = 'N')
 
         self.overall_grid_layout.addWidget(self.momentum_px_plot, 0, 0)
@@ -92,7 +92,7 @@ class MomentumDistributions(QWidget):
             We require that an `.npz` file is supplied with
             the relevant data. It turns out that the 22-27th
             columns of the entire rank-2 matrix file are what
-            is required for the vertex distribution.
+            is required for the momentum distribution.
         """
 
         number_of_events_in_spill = len(slice_of_events_and_kinematics)
@@ -187,24 +187,24 @@ class MomentumDistributions(QWidget):
             x = per_event_positive_muon_x_momentum_bins[:-1],
             height = per_event_positive_muon_x_momentum_histogram_data,
             width = (per_event_positive_muon_x_momentum_bins[1] - per_event_positive_muon_x_momentum_bins[0]),
-            pen = pg.mkPen(color = (0, 0, 255, 150), width = 2),
-            brush = pg.mkBrush(0, 0, 255, 20)
+            pen = pg.mkPen(color = (255, 0, 0, 150), width = 2),
+            brush = pg.mkBrush(255, 0, 0, 20)
         )
 
         self.per_event_momentum_py_positive_muon_histogram = pg.BarGraphItem(
             x = per_event_positive_muon_y_momentum_bins[:-1],
             height = per_event_positive_muon_y_momentum_histogram_data,
             width = (per_event_positive_muon_y_momentum_bins[1] - per_event_positive_muon_y_momentum_bins[0]),
-            pen = pg.mkPen(color = (0, 0, 255, 150), width = 2),
-            brush = pg.mkBrush(0, 0, 255, 20)
+            pen = pg.mkPen(color = (255, 0, 0, 150), width = 2),
+            brush = pg.mkBrush(255, 0, 0, 20)
         )
 
         self.per_event_momentum_pz_positive_muon_histogram = pg.BarGraphItem(
             x = per_event_positive_muon_z_momentum_bins[:-1],
             height = per_event_positive_muon_z_momentum_histogram_data,
             width = (per_event_positive_muon_z_momentum_bins[1] - per_event_positive_muon_z_momentum_bins[0]),
-            pen = pg.mkPen(color = (0, 0, 255, 150), width = 2),
-            brush = pg.mkBrush(0, 0, 255, 20)
+            pen = pg.mkPen(color = (255, 0, 0, 150), width = 2),
+            brush = pg.mkBrush(255, 0, 0, 20)
         )
 
         self.per_event_momentum_px_negative_muon_histogram = pg.BarGraphItem(
@@ -259,6 +259,9 @@ class MomentumDistributions(QWidget):
         per_event_momentum_py_plot_item.setTitle(f'SpinQuest | py Distribution | Event Number: {event_number}')
         per_event_momentum_pz_plot_item.setTitle(f'SpinQuest | pz Distribution | Event Number: {event_number}')
 
+        per_event_momentum_px_plot_item.addItem(self.per_event_momentum_px_positive_muon_histogram)
+        per_event_momentum_py_plot_item.addItem(self.per_event_momentum_py_positive_muon_histogram)
+        per_event_momentum_pz_plot_item.addItem(self.per_event_momentum_pz_positive_muon_histogram)
         per_event_momentum_px_plot_item.addItem(self.per_event_momentum_px_negative_muon_histogram)
         per_event_momentum_py_plot_item.addItem(self.per_event_momentum_py_negative_muon_histogram)
         per_event_momentum_pz_plot_item.addItem(self.per_event_momentum_pz_negative_muon_histogram)

@@ -62,7 +62,6 @@ class FileWatcher(FileSystemEventHandler):
         self.result_signal = result_signal
 
     def on_created(self, event):
-        self.result_signal.emit("> [FileWatcher]: Detected event!")
         if event.is_directory:
             self.result_signal.emit("> [FileWatcher]: New directory detected!")
         elif event.src_path.endswith('.root'):
@@ -71,3 +70,5 @@ class FileWatcher(FileSystemEventHandler):
             self.result_signal.emit(f"> [FileWatcher]: New .npy reconstructed file at: {event.src_path}")
         elif event.src_path.endswith('.npz'):
             self.result_signal.emit(f"> [FileWatcher]: New .npz reconstructed file at: {event.src_path}")
+        else:
+            self.result_signal.emit(f"> [FileWatcher]: Unfamiliar file type at: {event.src_path}")

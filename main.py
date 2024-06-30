@@ -41,53 +41,88 @@ class MainWindow(QMainWindow):
         # (1): Initialize the central widget that contains all the GUI:
         self.central_widget = QWidget()
 
-        # (2): Initialie the central tab that contains all the GUI tabs:
+        # (2): Initialize the central tab that contains all the GUI tabs:
         self.central_tab = QTabWidget()
 
         # (3.1): Initialize Tabs | Main Menu / Dashboard
         self.main_menu_tab = MainMenuTab(self.central_tab)
 
-        # (3.2): Initialize Tabs | LoggingTab:
-        self.logging_tab = LoggingTab()
-
-        # (3.3): Initialize Tabs | VertexTab:
-        self.vertex_tab = VertexTab()
-
-        # (3.4): Initialize Tabs | MassHistogramTab:
+        # (3.2): Initialize Tabs | MassHistogramTab:
         self.mass_histogram = MassHistogramTab()
 
-        # (3.5): Initialize Tabs | HitMatrixTab:
+        # (3.3): Initialize Tabs | MomentumDistributionTab:
+        self.momentum_distribution = MomentumDistributionTab()
+
+        # (3.4): Initialize Tabs | HitMatrixTab:
         self.hit_matrix = HitMatrixTab()
 
-        self.momentum_distribution = MomentumDistributionTab()
+        # (3.5): Initialize Tabs | VertexTab:
+        self.vertex_tab = VertexTab()
+
+        # (3.6): Initialize Tabs | LoggingTab:
+        self.logging_tab = LoggingTab()
 
         # (3.7): Initialize Tabs | CommandHistoryTab:
         self.command_history = CommandHistoryTab()
 
+        # (4): Initialize the central menu of buttons that control the application:
+
+        # (4.1): Initialize the CentralMenu() widget:
         self.main_menu_widget = CentralMenu()
+
+        # (4.2): Connect the emit `state_updated` to the socket `state_update_detected`:
         self.main_menu_widget.state_updated.connect(self.state_update_detected)
 
-        # (): Adding tabs to the central layout:
+        # (5): Adding tabs to the central layout:
+
+        # (5.1): Adding Tabs | Main Menu:
         self.central_tab.addTab(self.main_menu_tab, self.main_menu_tab.name)
-        self.central_tab.addTab(self.vertex_tab, self.vertex_tab.name)
+
+        # (5.2): Adding Tabs | Mass Histogram:
         self.central_tab.addTab(self.mass_histogram, self.mass_histogram.name)
-        self.central_tab.addTab(self.hit_matrix, self.hit_matrix.name)
+
+        # (5.3): Adding Tabs | Momentum Distribution:
         self.central_tab.addTab(self.momentum_distribution, self.momentum_distribution.name)
+
+        # (5.4): Adding Tabs | Hit Display:
+        self.central_tab.addTab(self.hit_matrix, self.hit_matrix.name)
+
+        # (5.5): Adding Tabs | Vertex Displays:
+        self.central_tab.addTab(self.vertex_tab, self.vertex_tab.name)
+
+        # (5.6): Adding Tabs | Logging Tab:
         self.central_tab.addTab(self.logging_tab, self.logging_tab.name)
+
+        # (5.7): Adding Tabs | Command History:
         self.central_tab.addTab(self.command_history, self.command_history.name)
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.main_menu_widget)
-        self.layout.addWidget(self.central_tab)
+        # (6): Handle the GUI layout: two big boxes stacked vertically in one large box:
 
-        self.central_widget.setLayout(self.layout)
+        # (6.1): Initialize a vertical box:
+        self.main_layout = QVBoxLayout()
+
+        # (6.2): Add to the vertical box the Main Menu:
+        self.main_layout.addWidget(self.main_menu_widget)
+
+        # (6.3): Add to the vertical the central tab (that contains all the other tabs):
+        self.main_layout.addWidget(self.central_tab)
+        
+        # (6.4): Conclude GUI layout setup:
+        self.central_widget.setLayout(self.main_layout)
+
+        # (7): Define the central widget of the application to be that widget that contains everything we just did:
         self.setCentralWidget(self.central_widget)
 
-    def propagate_data_to_tabs(self, data_packet):
+    def propagate_data_to_tabs(self, data_packet: dict):
         """
         # Description:
         We pass the data packet from the `.npy` file to all
         of the tabs that require it for plotting.
+
+        # Arguments:
+        data_packet: dict
+            The packet that contains all the relevant data that will
+            end up in all the GUI windows, tab, and plots.
         """
         reconstructed_data_filename = data_packet['filename']
         reconstructed_data_filepath = data_packet['filepath']
@@ -124,9 +159,23 @@ class MainWindow(QMainWindow):
         }
         self.command_history.update_output(command_history_data_packet)
 
-    def state_update_detected(self, data):
-        print(f"> Now shifting to new .npz file.")
-        self.propagate_data_to_tabs(data)
+    def state_update_detected(self, data: dict):
+        """
+        # Description:
+        We provide an intermediary function that captures the data 
+        to be emitted to all the GUI components. The main purpose
+        of this function is to just activate `propagate_data_to_tabs`
+        provided `data` is not `None`.
+
+        # Arguments:
+        data: (dict)
+            The dictionary of data that will be sent to all the GUI
+            components.
+        """
+        if not isinstance(data, None):
+            self.propagate_data_to_tabs(data)
+        else:
+            pass
 
 
 def main():
