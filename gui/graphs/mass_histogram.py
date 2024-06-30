@@ -82,6 +82,7 @@ class MassHistogram(QWidget):
 
         # This will be a rank-2 matrix with: [events, momentum] -> [events, mass]
         mass_array = calculate_invariant_mass(data_with_possible_dimuons[:, 26:32])
+        print(mass_array)
 
         # Create a histogram item
         mass_histogram, bins = np.histogram(mass_array, bins = np.linspace(0., 10.0, 301))

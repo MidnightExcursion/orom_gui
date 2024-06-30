@@ -25,7 +25,7 @@ Any variable that doesn't ever change should be called a "static variable." Plea
 
 Only the `PyQT5` logic that goes into coding a particular tab should go here. In our case, that is mostly configuring the layout of a given tab. Remember: no calculations should go into these files.
 
-## Threats:
+## Threads:
 
 Who knows what this is?
 

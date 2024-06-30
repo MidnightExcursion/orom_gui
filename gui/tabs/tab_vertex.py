@@ -20,5 +20,4 @@ class VertexTab(QWidget):
         self.setLayout(layout)
 
     def update_vertex_data(self, npy_file):
-        print(npy_file)
         self.vertex_distribution.update_vertex_data(npy_file)
