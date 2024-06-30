@@ -50,39 +50,62 @@ class CentralMenu(QWidget):
         # (2.1): Initialize first child component of top-level HBox: light indicator:
         self.light_indicator = LightIndicator()
 
-        # (2.2): Initialize the second child component of top-level HBox: 3x3 button menu:
+        # (2.2): Initialize the second child component of top-level HBox: 32x3 button menu:
         self.button_menu_grid_layout = QGridLayout()
+
+        # (2.2.1): The button-menu is actually a 2x3 grid of buttons:
         self.button_menu_grid = QWidget()
 
-        # (3): Initialize each 1x3 HBox button layout:
-
-        vertical_box_layout_for_menu_buttons = QVBoxLayout()
-
+        # (3): Initialize the vertical box containing the text information about file, run, spill, event:
         vertical_box_layout = QVBoxLayout()
 
-        self.textbox = QLineEdit(self)
-        self.textbox.setReadOnly(True)
+        # (4): Initalize the textboxes containing text info about file, run, spill, event:
 
+        # (4.1): Initialize the textbox_file_name containing the "Current File: xxx" label:
+        self.textbox_file_name = QLineEdit(self)
+
+        # (4.1.1): Restrict to read-only:
+        self.textbox_file_name.setReadOnly(True)
+
+        # (4.2): Initalize the textbox run_number containing text "Run: xxx": 
         self.textbox_run_number = QLineEdit(self)
+
+        # (4.2.1.): Restrict to read-only:
         self.textbox_run_number.setReadOnly(True)
 
+        # (4.3): Initalize the textbox spill_number containing text "Spill: xxx": 
         self.textbox_spill_number = QLineEdit(self)
+
+        # (4.3.1.): Restrict to read-only:
         self.textbox_spill_number.setReadOnly(True)
 
+        # (4.4): Initalize the textbox event_number containing text "Event: xxx": 
         self.textbox_event_number = QLineEdit(self)
+
+        # (4.4.1.): Restrict to read-only:
         self.textbox_event_number.setReadOnly(True)
 
-        # (): Spill Buttons:
+        # (5): Initialize the spill buttons:
 
-        button_current_spill = QPushButton("[ Current Spill ]")
+        # (5.1.1): Initialize the QPushButton for the "Current Spill" feature:
+        button_current_spill = QPushButton(text = "[ Current Spill ]")
+
+        # (5.1.2): It's only a pushable button:
         button_current_spill.setCheckable(False)
+
+        # (5.1.3): Bind the event "clicked" to a function "button_current_clicked"
         button_current_spill.clicked.connect(self.button_current_clicked)
 
-        button_previous_spill = QPushButton("[ Previous Spill ]")
+        # (5.2.1): Initialize the QPushButton for the "Previous Spill" feature:
+        button_previous_spill = QPushButton(text = "[ Previous Spill ]")
+        
+        # (5.2.2): It's only a pushable button:
         button_previous_spill.setCheckable(False)
+
+        # (5.2.3): Bind the event "clicked" to a function "button_previous_clicked"
         button_previous_spill.clicked.connect(self.button_previous_clicked)
         
-        button_next_spill = QPushButton("[ Next Spill ]")
+        button_next_spill = QPushButton(text = "[ Next Spill ]")
         button_next_spill.setCheckable(False)
         button_next_spill.clicked.connect(self.button_next_clicked)
 
@@ -112,7 +135,8 @@ class CentralMenu(QWidget):
         horizonal_box_layout_for_light_and_buttons.addWidget(self.button_menu_grid)
 
         vertical_box_layout.addLayout(horizonal_box_layout_for_light_and_buttons)
-        vertical_box_layout.addWidget(self.textbox)
+        vertical_box_layout.addWidget(self.textbox_file_name)
+        vertical_box_layout.addWidget(self.textbox_run_number)
         vertical_box_layout.addWidget(self.textbox_spill_number)
         vertical_box_layout.addWidget(self.textbox_event_number)
 
@@ -312,15 +336,15 @@ class CentralMenu(QWidget):
         # (4.3): [3] | Track Data:
         track_data = file_data['Tracks']
 
-        # (5): We obtain the name of the file so we can propagate it to the CentralMenu textbox:
+        # (5): We obtain the name of the file so we can propagate it to the CentralMenu textbox_file_name:
         filename_data = f"> Current File: {self.sorted_npz_files[self.current_file_index]}"
         
-        # (6): This follows from (3): we put the filename into the textbox with .setText()
+        # (6): This follows from (3): we put the filename into the textbox_file_name with .setText()
         current_run_number = output_data[self.current_event_index, 34]
         current_spill_number = output_data[self.current_event_index, 36]
         current_event_number = output_data[self.current_event_index, 35]
         
-        self.textbox.setText(filename_data)
+        self.textbox_file_name.setText(filename_data)
         self.textbox_run_number.setText(f"> Run: {current_run_number}")
         self.textbox_spill_number.setText(f"> Spill: {current_spill_number} ")
         self.textbox_event_number.setText(f"> Event: {current_event_number}")

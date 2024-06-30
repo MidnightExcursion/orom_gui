@@ -85,6 +85,7 @@ class MassHistogram(QWidget):
 
         # Create a histogram item
         mass_histogram, bins = np.histogram(mass_array, bins = np.linspace(0., 10.0, 301))
+        print(mass_histogram)
 
         self.mass_histogram = pg.BarGraphItem(
             x = bins[:-1],

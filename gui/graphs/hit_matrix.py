@@ -2,7 +2,7 @@ import numpy as np
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QHBoxLayout, QWidget
 
-from gui.statics.statics import _DETECTOR_ARRANGEMENT
+from gui.statics.statics import _MAXIMUM_ELEMENTID_IN_GIVEN_DETECTOR
 
 class HitDisplayPlot(QWidget):
     def __init__(self, parent=None):
@@ -59,77 +59,6 @@ class HitDisplayPlot(QWidget):
         # (2.2): The element IDs that have hits are here; they function as the "y-coordinate"
         hit_elementIDs = []
 
-        max_ele = [
-            200,
-            200,
-            168,
-            168,
-            200,
-            200,
-            128,
-            128,
-            112,
-            112,
-            128,
-            128,
-            134,
-            134,
-            112,
-            112,
-            134,
-            134,
-            20,
-            20,
-            16,
-            16,
-            16,
-            16,
-            16,
-            16,
-            72,
-            72,
-            72,
-            72,
-            72,
-            72,
-            72,
-            72,
-            200,
-            200,
-            168,
-            168,
-            200,
-            200,
-            128,
-            128,
-            112,
-            112,
-            128,
-            128,
-            134,
-            134,
-            112,
-            112,
-            134,
-            134,
-            20,
-            20,
-            16,
-            16,
-            16,
-            16,
-            16,
-            16,
-            72,
-            72,
-            72,
-            72,
-            72,
-            72,
-            72,
-            72
-            ]
-
         for hit_matrix in list_of_hit_matrices:
             
             # (): Obtain a list of lists --- the inner list is just the [row, column] index of hit_matrix with a 1 in it:
@@ -139,7 +68,7 @@ class HitDisplayPlot(QWidget):
             for detectorID_and_elementID_pair in hit_indices:
                 detectorID_index = int(detectorID_and_elementID_pair[0])
                 elementID_index = int(detectorID_and_elementID_pair[1])
-                detectorID_and_elementID_pair[1] = elementID_index / max_ele[detectorID_index]
+                detectorID_and_elementID_pair[1] = elementID_index / _MAXIMUM_ELEMENTID_IN_GIVEN_DETECTOR[detectorID_index]
 
             hit_detectorIDs.extend(hit_indices[:, 0])
             hit_elementIDs.extend(hit_indices[:, 1])
@@ -153,7 +82,7 @@ class HitDisplayPlot(QWidget):
         for detectorID_and_elementID_pair in hit_indices_for_event:
             detectorID_index = int(detectorID_and_elementID_pair[0])
             elementID_index = int(detectorID_and_elementID_pair[1])
-            detectorID_and_elementID_pair[1] = elementID_index / max_ele[detectorID_index]
+            detectorID_and_elementID_pair[1] = elementID_index / _MAXIMUM_ELEMENTID_IN_GIVEN_DETECTOR[detectorID_index]
 
         hit_detectorIDs_for_event.extend(hit_indices_for_event[:, 0])
         hit_elementIDs_for_event.extend(hit_indices_for_event[:, 1])

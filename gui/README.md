@@ -57,18 +57,18 @@ Every row in `file_output_data` corresponds to an event in a given spill. Then, 
 10. $p_{x}$ of the negative muon with no assumptions about where the vertex was.
 11. $p_{y}$ of the negative muon with no assumptions about where the vertex was.
 12. $p_{z}$ of the negative muon with no assumptions about where the vertex was.
-13. (?) Vertex $x-$position of the dimuon pair with no assumptions about where the vertex was.
-14. (?) Vertex $y-$position of the dimuon pair with no assumptions about where the vertex was.
-15. (?) Vertex $z-$position of the dimuon pair with no assumptions about where the vertex was.
+13. (?) Vertex $x-$ position of the dimuon pair with no assumptions about where the vertex was.
+14. (?) Vertex $y-$ position of the dimuon pair with no assumptions about where the vertex was.
+15. (?) Vertex $z-$ position of the dimuon pair with no assumptions about where the vertex was.
 16. $p_{x}$ of the positive muon assuming the dimuon was produced along the beamline.
 17. $p_{y}$ of the positive muon assuming the dimuon was produced along the beamline.
 18. $p_{z}$ of the positive muon assuming the dimuon was produced along the beamline.
 19. $p_{x}$ of the negative muon assuming the dimuon was produced along the beamline.
 20. $p_{y}$ of the negative muon assuming the dimuon was produced along the beamline.
 21. $p_{z}$ of the negative muon assuming the dimuon was produced along the beamline.
-22. (?) Vertex $x-$position of the dimuon pair assuming the dimuon was produced along the beamline.
-23. (?) Vertex $y-$position of the dimuon pair assuming the dimuon was produced along the beamline.
-24. (?) Vertex $z-$position of the dimuon pair assuming the dimuon was produced along the beamline.
+22. (?) Vertex $x-$ position of the dimuon pair assuming the dimuon was produced along the beamline.
+23. (?) Vertex $y-$ position of the dimuon pair assuming the dimuon was produced along the beamline.
+24. (?) Vertex $z-$ position of the dimuon pair assuming the dimuon was produced along the beamline.
 25. $p_{x}$ of the positive muon with no assumptions about where the vertex was (the vertex position).
 26. $p_{y}$ of the positive muon with no assumptions about where the vertex was.
 27. $p_{z}$ of the positive muon with no assumptions about where the vertex was.
