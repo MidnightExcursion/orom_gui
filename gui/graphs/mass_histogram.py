@@ -32,10 +32,12 @@ class MassHistogram(QWidget):
         # mass_plot_font.setPixelSize(22)
 
         all_event_mass_histogram_plot_item.showGrid(x = True, y = True)
+        all_event_mass_histogram_plot_item.setTitle(f'SpinQuest | Mass Spectrum | Total Events:')
         all_event_mass_histogram_plot_item.setLabel('bottom',"Mass", units = "GeV")
         all_event_mass_histogram_plot_item.setLabel('left',"Counts", units = "N")
 
         single_event_mass_histogram_plot_item.showGrid(x = True, y = True)
+        single_event_mass_histogram_plot_item.setTitle(f'SpinQuest | Mass Spectrum | Event Number:')
         single_event_mass_histogram_plot_item.setLabel('bottom',"Mass", units = "GeV")
         single_event_mass_histogram_plot_item.setLabel('left',"Counts", units = "N")
 

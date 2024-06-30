@@ -25,7 +25,7 @@ class MomentumDistributionTab(QWidget):
 
         self.setLayout(layout)
 
-    def update_momentum_distribution(self, output_data, event_number_index):
+    def update_momentum_distribution(self, output_data, event_number):
         """
         # Description:
         Simply provide a slot for the incoming data that gets
@@ -35,7 +35,7 @@ class MomentumDistributionTab(QWidget):
         `output_data`: ListType
             some sort of insane array that we'll analyze.
 
-        `event_number_index`: int
-            The current event number plus one to turn it into its corresponding index.
+        `event_number`: int
+            The current event number.
         """
-        self.momentum_distribution.update_momentum_distribution(output_data, event_number_index)
+        self.momentum_distribution.update_momentum_distribution(output_data, event_number)
