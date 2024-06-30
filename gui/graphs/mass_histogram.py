@@ -103,7 +103,7 @@ class MassHistogram(QWidget):
             x = bins[:-1],
             height = single_event_mass_histogram,
             width = (bins[1] - bins[0]),
-            pen = pg.mkPen('blue') if is_single_event_a_dimuon_boolean else pg.mkPen('orange'),
+            pen = pg.mkPen('green') if is_single_event_a_dimuon_boolean else pg.mkPen('red'),
             brush = pg.mkBrush('white'))
         
         all_event_mass_histogram_plot_item = self.mass_histogram_plot.getPlotItem()
@@ -120,13 +120,13 @@ class MassHistogram(QWidget):
         vertical_line_j_psi_mass = pg.InfiniteLine(
             angle = 90,
             movable = False,
-            pen = pg.mkPen('red'))
+            pen = pg.mkPen('blue'))
         vertical_line_j_psi_mass.setPos(_MASS_OF_J_PSI_IN_GEV)
 
         vertical_line_j_2s_mass = pg.InfiniteLine(
             angle = 90,
             movable = False,
-            pen = pg.mkPen('red'))
+            pen = pg.mkPen('blue'))
         vertical_line_j_2s_mass.setPos(_MASS_OF_PSI_2S_IN_GEV)
         
         
