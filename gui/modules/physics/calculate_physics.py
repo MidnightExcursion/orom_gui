@@ -62,6 +62,8 @@ def calculate_invariant_mass(slice_of_events_and_kinematics):
         positive_muon_momentum_x, 
         positive_muon_momentum_y,
         positive_muon_momentum_z])
+    
+    #commens
 
     energy_of_negative_muon = np.sqrt(
         negative_muon_momentum_x * negative_muon_momentum_x + 
