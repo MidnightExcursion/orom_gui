@@ -22,22 +22,22 @@ def calculate_invariant_mass(slice_of_events_and_kinematics):
     # (1): Obtain the columns containing momenta for the plus and minus muon:
 
     # (1.1): Obtain the column corresponding to the positive muons's p_{x}:
-    positive_muon_momentum_x = slice_of_events_and_kinematics[:, 0]
+    positive_muon_momentum_x = slice_of_events_and_kinematics[:, 0] if slice_of_events_and_kinematics.ndim == 2 else slice_of_events_and_kinematics[0]
 
     # (1.2): Obtain the column corresponding to the positive muons's p_{y}:
-    positive_muon_momentum_y = slice_of_events_and_kinematics[:, 1]
+    positive_muon_momentum_y = slice_of_events_and_kinematics[:, 1] if slice_of_events_and_kinematics.ndim == 2 else slice_of_events_and_kinematics[1]
 
     # (1.3): Obtain the column corresponding to the positive muons's p_{z}:
-    positive_muon_momentum_z = slice_of_events_and_kinematics[:, 2]
+    positive_muon_momentum_z = slice_of_events_and_kinematics[:, 2] if slice_of_events_and_kinematics.ndim == 2 else slice_of_events_and_kinematics[2]
 
     # (1.4): Obtain the column corresponding to the negative muons's p_{x}:
-    negative_muon_momentum_x = slice_of_events_and_kinematics[:, 3]
+    negative_muon_momentum_x = slice_of_events_and_kinematics[:, 3] if slice_of_events_and_kinematics.ndim == 2 else slice_of_events_and_kinematics[3]
 
     # (1.5): Obtain the column corresponding to the negative muons's p_{y}:
-    negative_muon_momentum_y = slice_of_events_and_kinematics[:, 4]
+    negative_muon_momentum_y = slice_of_events_and_kinematics[:, 4] if slice_of_events_and_kinematics.ndim == 2 else slice_of_events_and_kinematics[4]
 
     # (1.6): Obtain the column corresponding to the negative muons's p_{z}:
-    negative_muon_momentum_z = slice_of_events_and_kinematics[:, 5]
+    negative_muon_momentum_z = slice_of_events_and_kinematics[:, 5] if slice_of_events_and_kinematics.ndim == 2 else slice_of_events_and_kinematics[5]
 
     energy_of_proton_beam_in_GeV = 120.0
 
@@ -78,8 +78,12 @@ def calculate_invariant_mass(slice_of_events_and_kinematics):
     total_momentum_four_vector = four_momentum_positive_muon + four_momentum_negative_muon
 
     invariant_dimuon_mass_squared = np.power(total_momentum_four_vector[0], 2) - (np.power(total_momentum_four_vector[1], 2) + np.power(total_momentum_four_vector[2], 2) + np.power(total_momentum_four_vector[3], 2))
-    
-    invariant_dimuon_mass_squared_no_negative_masses = [mass for mass in invariant_dimuon_mass_squared if mass >= 0]
+
+    if isinstance(invariant_dimuon_mass_squared, np.ndarray):
+        invariant_dimuon_mass_squared_no_negative_masses = [mass for mass in invariant_dimuon_mass_squared if mass >= 0]
+    else:
+        invariant_dimuon_mass_squared_no_negative_masses = invariant_dimuon_mass_squared if invariant_dimuon_mass_squared >= 0 else []
+
     
     invariant_dimuon_mass = np.sqrt(invariant_dimuon_mass_squared_no_negative_masses)
 

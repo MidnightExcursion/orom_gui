@@ -322,9 +322,6 @@ class CentralMenu(QWidget):
         self.number_of_events_in_given_spill = len(file_data['output_data'])
 
         # # (4): The `.npz` file contains three pieces of relevant data:
-        print(f"> Run {file_data['output_data'][self.current_event_index, 34]}, Spill {file_data['output_data'][self.current_event_index, 36]}, Event {file_data['output_data'][self.current_event_index, 35]}")
-        # print(file_data['output_data'][self.current_event_index, 38])
-
         print(len(file_data['output_data']))
 
         # # (4.1): [1] | Physics Data:

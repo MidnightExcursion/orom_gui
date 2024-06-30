@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
         self.vertex_tab.update_vertex_data(reconstructed_data_output_data)
 
         # (3): Mass Histogram:
-        self.mass_histogram.update_histogram_data(reconstructed_data_output_data)
+        self.mass_histogram.update_histogram_data(reconstructed_data_output_data, event_number)
 
         # (4): Hit Display:
         self.hit_matrix.update_hit_data(
