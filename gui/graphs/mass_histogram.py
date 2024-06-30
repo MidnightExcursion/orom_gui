@@ -32,12 +32,12 @@ class MassHistogram(QWidget):
         # mass_plot_font.setPixelSize(22)
 
         all_event_mass_histogram_plot_item.showGrid(x = True, y = True)
-        all_event_mass_histogram_plot_item.setLabel('bottom',"Mass [GeV]")
-        all_event_mass_histogram_plot_item.setLabel('left',"Counts [N]")
+        all_event_mass_histogram_plot_item.setLabel('bottom',"Mass", units = "GeV")
+        all_event_mass_histogram_plot_item.setLabel('left',"Counts", units = "N")
 
         single_event_mass_histogram_plot_item.showGrid(x = True, y = True)
-        single_event_mass_histogram_plot_item.setLabel('bottom',"Mass [GeV]")
-        single_event_mass_histogram_plot_item.setLabel('left',"Counts [N]")
+        single_event_mass_histogram_plot_item.setLabel('bottom',"Mass", units = "GeV")
+        single_event_mass_histogram_plot_item.setLabel('left',"Counts", units = "N")
 
         # tick_font = {'color': 'k', 'font-size': '16pt', 'font-family': 'Arial'}
 

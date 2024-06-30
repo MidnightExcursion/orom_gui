@@ -13,6 +13,7 @@ from gui.tabs.tab_logging import LoggingTab
 from gui.tabs.tab_vertex import VertexTab
 from gui.tabs.tab_mass_histogram import MassHistogramTab
 from gui.tabs.tab_hit_matrix import HitMatrixTab
+from gui.tabs.tab_momentum_distributions import MomentumDistributionTab
 from gui.tabs.tab_history import CommandHistoryTab
 
 from gui.statics.statics import _APPLICATION_NAME
@@ -58,6 +59,8 @@ class MainWindow(QMainWindow):
         # (3.5): Initialize Tabs | HitMatrixTab:
         self.hit_matrix = HitMatrixTab()
 
+        self.momentum_distribution = MomentumDistributionTab()
+
         # (3.7): Initialize Tabs | CommandHistoryTab:
         self.command_history = CommandHistoryTab()
 
@@ -69,6 +72,7 @@ class MainWindow(QMainWindow):
         self.central_tab.addTab(self.vertex_tab, self.vertex_tab.name)
         self.central_tab.addTab(self.mass_histogram, self.mass_histogram.name)
         self.central_tab.addTab(self.hit_matrix, self.hit_matrix.name)
+        self.central_tab.addTab(self.momentum_distribution, self.momentum_distribution.name)
         self.central_tab.addTab(self.logging_tab, self.logging_tab.name)
         self.central_tab.addTab(self.command_history, self.command_history.name)
 
@@ -109,6 +113,9 @@ class MainWindow(QMainWindow):
             event_number)
 
         # (6): 
+        self.momentum_distribution.update_momentum_distribution(
+            reconstructed_data_output_data,
+            event_number)
 
         # (7): Command History:
         command_history_data_packet = {
