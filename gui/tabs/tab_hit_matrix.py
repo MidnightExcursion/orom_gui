@@ -22,12 +22,18 @@ class HitMatrixTab(QWidget):
         layout.addWidget(self.hit_display_plot)
         self.setLayout(layout)
 
-    def update_hit_data(self, hit_data, single_event_data, event_number):
+    def update_hit_data(
+            self,
+            hit_data,
+            single_event_data,
+            track_data,
+            single_track_data,
+            event_number):
         """
-        Update the tab with the hit data and track data.
-
-        :param hit_data: A rank-3 numpy array where the first index is 
-                         the event number, and each event is a rank-2 matrix of 0s and 1s.
-        :param track_data: Additional track data (not used in this example).
         """
-        self.hit_display_plot.update_hit_data(hit_data, single_event_data, event_number)
+        self.hit_display_plot.update_hit_data(
+            hit_data,
+            single_event_data,
+            track_data,
+            single_track_data,
+            event_number)

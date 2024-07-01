@@ -38,7 +38,13 @@ class HitDisplayPlot(QWidget):
 
         self.setLayout(layout)
 
-    def update_hit_data(self, list_of_hit_matrices, single_hit_matrix, event_number):
+    def update_hit_data(
+            self,
+            list_of_hit_matrices, 
+            single_hit_matrix, 
+            list_of_track_data,
+            single_track_data,
+            event_number):
         """
         # Description:
         Update the scatter plot with the hit data from all events.
@@ -47,6 +53,8 @@ class HitDisplayPlot(QWidget):
         :param list_of_hit_matrices: A rank-3 numpy array where the first index is 
                          the event number, and each event is a rank-2 matrix of 0s and 1s.
         """
+        print("Track data")
+        print(list_of_track_data)
 
         # (1) Obtain the length of the incomig data --- that is the total number of dimuon events:
         number_of_events_in_spill = len(list_of_hit_matrices)

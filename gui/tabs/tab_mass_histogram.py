@@ -1,6 +1,6 @@
 import os
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QHBoxLayout
 
 import numpy as np
 
@@ -17,7 +17,7 @@ class MassHistogramTab(QWidget):
         self.initialize_ui()
 
     def initialize_ui(self):
-        layout = QVBoxLayout()
+        layout = QHBoxLayout()
         self.mass_histogram = MassHistogram()
         layout.addWidget(self.mass_histogram)
         self.setLayout(layout)

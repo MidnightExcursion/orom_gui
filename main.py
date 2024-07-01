@@ -132,25 +132,29 @@ class MainWindow(QMainWindow):
         event_number = data_packet['event_number']
         reconstructed_data_track_data = data_packet['file_track_data']
 
-        # (1): Reconstructed Logs:
-        # Needs nothng
+        # (1): Passing the `data_packet` to the Main Menu:
+        self.main_menu_tab.propagate_data_to_all_graphs(data_packet)
 
-        # (2): Vertex Display:
-        self.vertex_tab.update_vertex_data(reconstructed_data_output_data)
+        # (2): Passing subsections of `data_packet` to all the component graphs:                                                                                                                                             
 
-        # (3): Mass Histogram:
+        # (2.1): Passing Data | Mass Histogram:
         self.mass_histogram.update_histogram_data(reconstructed_data_output_data, event_number)
 
-        # (4): Hit Display:
-        self.hit_matrix.update_hit_data(
-            reconstructed_data_hit_matrix,
-            reconstructed_data_hit_matrix_for_event,
-            event_number)
-
-        # (6): 
+        # (2.2): Passing Data | Momentum Distribution:
         self.momentum_distribution.update_momentum_distribution(
             reconstructed_data_output_data,
             event_number)
+
+        # (2.3): Passing Data | Hit Display:
+        self.hit_matrix.update_hit_data(
+            reconstructed_data_hit_matrix,
+            reconstructed_data_hit_matrix_for_event,
+            reconstructed_data_track_data,
+            None,
+            event_number)
+        
+        # (2.4): Passing Data | Vertex Display:
+        self.vertex_tab.update_vertex_data(reconstructed_data_output_data)
 
         # (7): Command History:
         command_history_data_packet = {
@@ -159,23 +163,19 @@ class MainWindow(QMainWindow):
         }
         self.command_history.update_output(command_history_data_packet)
 
-    def state_update_detected(self, data: dict):
+    def state_update_detected(self, data):
         """
         # Description:
         We provide an intermediary function that captures the data 
         to be emitted to all the GUI components. The main purpose
-        of this function is to just activate `propagate_data_to_tabs`
-        provided `data` is not `None`.
+        of this function is to just activate `propagate_data_to_tabs`.
 
         # Arguments:
         data: (dict)
             The dictionary of data that will be sent to all the GUI
             components.
         """
-        if not isinstance(data, None):
-            self.propagate_data_to_tabs(data)
-        else:
-            pass
+        self.propagate_data_to_tabs(data)
 
 
 def main():

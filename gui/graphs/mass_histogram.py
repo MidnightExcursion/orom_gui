@@ -1,6 +1,6 @@
 import numpy as np
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QHBoxLayout, QWidget
 
 from gui.modules.physics.calculate_physics import calculate_invariant_mass
 
@@ -17,7 +17,7 @@ class MassHistogram(QWidget):
         self.initialize_ui()
 
     def initialize_ui(self):
-        layout = QVBoxLayout()
+        layout = QHBoxLayout()
 
         self.mass_histogram_plot = pg.PlotWidget()
         self.single_event_mass_histogram_plot = pg.PlotWidget()
